@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="userListContainer" type="id" />
+    <item name="btnGetUser" type="id" />
+    <item name="btnLogin" type="id" />
+    <item name="editUsername" type="id" />
+    <item name="editPassword" type="id" />
+</resources>
