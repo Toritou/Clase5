@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var editUsername: EditText
     private lateinit var editPassword: EditText
     private val client = OkHttpClient()
-    private lateinit var userList: JSONArray // Guardaremos la lista de usuarios aquí después de la llamada
+    private lateinit var userList: JSONArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,20 +36,20 @@ class MainActivity : AppCompatActivity() {
         editUsername = findViewById(R.id.editUsername)
         editPassword = findViewById(R.id.editPassword)
 
-        // Acción del botón para iniciar sesión
+        // Acción del boton para iniciar sesion
         btnLogin.setOnClickListener {
-            // Intentar iniciar sesión con los datos ingresados
+            // Intentar iniciar sesion con los datos ingresados
             attemptLogin()
         }
 
-        // Acción del botón para obtener y mostrar los usuarios
+        // Acción del boton para obtener y mostrar los usuarios
         btnGetUser.setOnClickListener {
-            // Llamar al método para obtener los usuarios
+            // Llamar al metodo para obtener los usuarios
             getUsersFromService()
         }
     }
 
-    // Método para hacer la solicitud HTTP y obtener la lista de usuarios
+    // Metodo para hacer la solicitud HTTP y obtener la lista de usuarios
     private fun getUsersFromService() {
         // URL del servicio que devuelve la lista de usuarios
         val url = "http://54.236.89.141:8080/user"
@@ -60,13 +60,13 @@ class MainActivity : AppCompatActivity() {
 
         client.newCall(request).enqueue(object : okhttp3.Callback {
             override fun onFailure(call: okhttp3.Call, e: IOException) {
-                // Manejo básico para fallos en la conexión
+                // Manejo basico para fallos en la conexion
                 e.printStackTrace()
             }
 
             override fun onResponse(call: okhttp3.Call, response: Response) {
                 val responseData = response.body?.string() ?: ""
-                userList = JSONArray(responseData) // Guardar los usuarios obtenidos en una variable
+                userList = JSONArray(responseData)
 
                 // Ejecutar en el hilo principal para mostrar los usuarios
                 runOnUiThread {
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    // Método para mostrar la lista de usuarios en la pantalla
+    // Metodo para mostrar la lista de usuarios en la pantalla
     @SuppressLint("SetTextI18n")
     private fun showUsers(userList: JSONArray) {
         // Limpiar la lista de usuarios antes de mostrar nuevos usuarios
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Método para intentar iniciar sesión con el RUT y la contraseña
+    // Metodo para intentar iniciar sesion con el RUT y la contraseña
     private fun attemptLogin() {
         val rut = editUsername.text.toString()
         val password = editPassword.text.toString()
@@ -141,7 +141,7 @@ class MainActivity : AppCompatActivity() {
             // Buscar el usuario en la lista
             val user = findUserByRutAndPassword(rut, password)
             if (user != null) {
-                // Inicio de sesión exitoso, mostrar los datos del usuario
+                // Inicio de sesion exitoso, mostrar los datos del usuario
                 showAuthenticatedUser(user)
             } else {
                 Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
@@ -151,18 +151,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Método para buscar al usuario por RUT y contraseña
+    // Metodo para buscar al usuario por RUT y contraseña
     private fun findUserByRutAndPassword(rut: String, password: String): JSONObject? {
         for (i in 0 until userList.length()) {
             val user = userList.getJSONObject(i)
             if (user.getString("rut") == rut && user.getString("contraseña") == password) {
-                return user // Retornar el usuario encontrado
+                return user
             }
         }
-        return null // No se encontró el usuario
+        return null
     }
 
-    // Método para mostrar los datos del usuario autenticado
+    // Metodo para mostrar los datos del usuario autenticado
     @SuppressLint("SetTextI18n")
     private fun showAuthenticatedUser(user: JSONObject) {
         // Limpiar la vista actual
@@ -187,13 +187,11 @@ class MainActivity : AppCompatActivity() {
             setPadding(0, 8, 0, 0)
         }
 
-        // Agregar los TextViews al contenedor
         userListContainer.apply {
             addView(nombreTextView)
             addView(correoTextView)
         }
 
-        // Mensaje de inicio de sesión exitoso
         Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
     }
 }
